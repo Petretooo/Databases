@@ -1,0 +1,125 @@
+CREATE TABLE CUSTOMERS
+
+(
+
+CUSTOMER_ID INT IDENTITY(1,1) PRIMARY KEY,
+
+FNAME VARCHAR(15) NOT NULL,
+
+LNAME VARCHAR(15) NOT NULL,
+
+EMAIL VARCHAR(25) NOT NULL UNIQUE,
+
+--NUM_ID VARCHAR(10) PRIMARY KEY
+
+NUM_ID VARCHAR(10) NOT NULL UNIQUE,
+
+BIRTH_DATE DATETIME
+
+)
+
+CREATE TABLE FLIGHTS
+
+(
+
+FLIGHT_ID VARCHAR(20) PRIMARY KEY,
+
+COUNTRY VARCHAR(25) NOT NULL,
+
+TOWN VARCHAR(25) NOT NULL,
+
+FLIGHT_DATE DATETIME NOT NULL,
+
+PRICE NUMERIC(8,2) NOT NULL CHECK(PRICE > 0)
+
+)
+
+CREATE TABLE RESERVATIONS
+
+(
+
+--RESERVATION_DATE INT IDENTITY(1,1) PRIMARY KEY
+
+CUSTOMER_ID INT NOT NULL FOREIGN KEY REFERENCES CUSTOMERS,
+
+FLIGHT_ID VARCHAR(20) NOT NULL FOREIGN KEY REFERENCES FLIGHTS,
+
+RESERVATION_DATE DATETIME DEFAULT GETDATE(),--------------------------------------------------------------------------------------------------
+
+PRIMARY KEY(CUSTOMER_ID, FLIGHT_ID)--------------------------------------------------------------------------------------------------
+
+)
+
+/*КАСКАДНО ИЗТРИВАНЕ НА РЕД*/
+
+SELECT *
+
+FROM REGIONS
+
+SELECT *
+
+FROM COUNTRIES
+
+DELETE FROM REGIONS
+
+WHERE REGION_ID =1
+
+SELECT *
+
+FROM EMPLOYEES
+
+/*НЕ МОЖЕ ДА СЕ ИЗТРИЕ, ЗАЩОТО Е СВЪРЗАН ЗАПИС*/
+
+DELETE FROM EMPLOYEES
+
+WHERE EMPLOYEE_ID = 100
+
+/*МОЖЕ ДА БЪДЕ ИЗТРИТ*/
+
+DELETE FROM EMPLOYEES
+
+WHERE EMPLOYEE_ID = 206
+
+SELECT *
+
+FROM ORDERS
+
+SELECT *
+
+FROM ORDER_ITEMS
+
+WHERE ORDER_ID = 2354
+
+DELETE FROM ORDERS
+
+WHERE ORDER_ID = 2354
+
+/*Увеличете заплатите на всички служители, които работят в
+
+отдел 50 с 1000 */
+
+UPDATE EMPLOYEES
+
+SET SALARY += 1000 /*SALARY = SALARY + 1000*/
+
+WHERE DEPARTMENT_ID = 50
+
+/*Увеличете заплатите на служителите, които работят в отдел 80
+
+и получават заплата по-малка от 700, с 10%*/
+
+UPDATE EMPLOYEES
+
+SET SALARY *= 1.1
+
+WHERE DEPARTMENT_ID = 80 AND SALARY/12 < 700
+
+/*Увеличете количеството, в което е бил поръчан продукт 3139
+
+в поръчка 2354 с 200 бр и намалете единичната цена с 5 %*/
+
+UPDATE ORDER_ITEMS
+
+SET QUANTITY += 200, UNIT_PRICE *= 0.95
+
+WHERE PRODUCT_ID = 3139 AND ORDER_ID = 2355
